@@ -7,6 +7,7 @@ import semantic.symbol.Symbol;
 import semantic.symbol.SymbolTable;
 import semantic.symbol.SymbolType;
 
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -300,40 +301,27 @@ public class CodeGenerator {
             memory.add3AddressCode(Operation.ASSIGN, s1, s2, null);
 
     }
-
-    public void add() {
+    public void operation(Operation operation, String msg){
         Address temp = new Address(memory.getTemp(), varType.Int);
         Address s2 = ss.pop();
         Address s1 = ss.pop();
 
         if (s1.varType != varType.Int || s2.varType != varType.Int) {
-            ErrorHandler.printError("In add two operands must be integer");
+            ErrorHandler.printError(msg);
         }
-        memory.add3AddressCode(Operation.ADD, s1, s2, temp);
+        memory.add3AddressCode(operation, s1, s2, temp);
         ss.push(temp);
+    }
+    public void add() {
+        operation(Operation.ADD,"In add two operands must be integer");
     }
 
     public void sub() {
-        Address temp = new Address(memory.getTemp(), varType.Int);
-        Address s2 = ss.pop();
-        Address s1 = ss.pop();
-        if (s1.varType != varType.Int || s2.varType != varType.Int) {
-            ErrorHandler.printError("In sub two operands must be integer");
-        }
-        memory.add3AddressCode(Operation.SUB, s1, s2, temp);
-        ss.push(temp);
+        operation(Operation.SUB,"In sub two operands must be integer");
     }
 
     public void mult() {
-        Address temp = new Address(memory.getTemp(), varType.Int);
-        Address s2 = ss.pop();
-        Address s1 = ss.pop();
-        if (s1.varType != varType.Int || s2.varType != varType.Int) {
-            ErrorHandler.printError("In mult two operands must be integer");
-        }
-        memory.add3AddressCode(Operation.MULT, s1, s2, temp);
-//        memory.saveMemory();
-        ss.push(temp);
+        operation(Operation.MULT,"In mult two operands must be integer");
     }
 
     public void label() {
