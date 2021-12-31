@@ -9,6 +9,8 @@ import semantic.symbol.SymbolType;
 
 import java.util.Stack;
 
+import static semantic.symbol.SymbolType.Bool;
+
 /**
  * Created by Alireza on 6/27/2015.
  */
@@ -151,9 +153,6 @@ public class CodeGenerator {
 //    }
     public void checkID() {
         symbolStack.pop();
-        if (ss.peek().varType == varType.Non) {
-            //TODO : error
-        }
     }
 
     public void pid(Token next) {
@@ -164,13 +163,8 @@ public class CodeGenerator {
 
                 Symbol s = symbolTable.get(className, methodName, next.value);
                 varType t = varType.Int;
-                switch (s.type) {
-                    case Bool:
-                        t = varType.Bool;
-                        break;
-                    case Int:
-                        t = varType.Int;
-                        break;
+                if (s.type == Bool) {
+                    t = varType.Bool;
                 }
                 ss.push(new Address(s.address, t));
 
@@ -192,13 +186,8 @@ public class CodeGenerator {
 
         Symbol s = symbolTable.get(symbolStack.pop(), symbolStack.pop());
         varType t = varType.Int;
-        switch (s.type) {
-            case Bool:
-                t = varType.Bool;
-                break;
-            case Int:
-                t = varType.Int;
-                break;
+        if (s.type == Bool) {
+            t = varType.Bool;
         }
         ss.push(new Address(s.address, t));
 
@@ -234,15 +223,9 @@ public class CodeGenerator {
             ErrorHandler.printError("The few argument pass for method");
         } catch (IndexOutOfBoundsException e) {}
             varType t = varType.Int;
-            switch (symbolTable.getMethodReturnType(className, methodName))
-            {
-                case Int:
-                    t = varType.Int;
-                    break;
-                case Bool:
-                    t = varType.Bool;
-                    break;
-            }
+        if (symbolTable.getMethodReturnType(className, methodName) == Bool) {
+            t = varType.Bool;
+        }
             Address temp = new Address(memory.getTemp(),t);
             ss.push(temp);
             memory.add3AddressCode(Operation.ASSIGN, new Address(temp.num, varType.Address, TypeAddress.Imidiate), new Address(symbolTable.getMethodReturnAddress(className, methodName), varType.Address), null);
@@ -261,15 +244,7 @@ public class CodeGenerator {
 //        String className = symbolStack.pop();
         try {
             Symbol s = symbolTable.getNextParam(callStack.peek(), methodName);
-            varType t = varType.Int;
-            switch (s.type) {
-                case Bool:
-                    t = varType.Bool;
-                    break;
-                case Int:
-                    t = varType.Int;
-                    break;
-            }
+            varType t = varType.Int;    
             Address param = ss.pop();
             if (param.varType != t) {
                 ErrorHandler.printError("The argument type isn't match");
@@ -477,7 +452,7 @@ public class CodeGenerator {
     }
 
     public void lastTypeBool() {
-        symbolTable.setLastType(SymbolType.Bool);
+        symbolTable.setLastType(Bool);
     }
 
     public void lastTypeInt() {
