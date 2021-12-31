@@ -264,14 +264,9 @@ public class CodeGenerator {
 
             Address s1 = ss.pop();
             Address s2 = ss.pop();
-//        try {
             if (s1.varType != s2.varType) {
                 ErrorHandler.printError("The type of operands in assign is different ");
             }
-//        }catch (NullPointerException d)
-//        {
-//            d.printStackTrace();
-//        }
             memory.add3AddressCode(Operation.ASSIGN, s1, s2, null);
 
     }

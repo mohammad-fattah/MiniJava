@@ -12,9 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SymbolTable {
-    private Map<String, Klass> klasses;
-    private Map<String, Address> keyWords;
-    private Memory mem;
+    private final Map<String, Klass> klasses;
+    private  final Map<String, Address> keyWords;
+    private final Memory mem;
     private SymbolType lastType;
 
     public SymbolTable(Memory memory) {
@@ -71,13 +71,7 @@ public class SymbolTable {
     }
 
     public Symbol get(String fieldName,String className) {
-//        try {
             return klasses.get(className).getField(fieldName);
-//        }catch (NullPointerException n)
-//        {
-//            n.printStackTrace();
-//            return null;
-//        }
     }
 
     public Symbol get(String className, String methodName, String variable) {
@@ -92,12 +86,7 @@ public class SymbolTable {
     }
 
     public void startCall(String className,String methodName) {
-//        try {
-            klasses.get(className).Methodes.get(methodName).reset();
-//        }catch (NullPointerException n)
-//        {
-//            n.printStackTrace();
-//        }
+        klasses.get(className).Methodes.get(methodName).reset();
     }
 
     public int getMethodCallerAddress(String className, String methodName) {
@@ -109,12 +98,7 @@ public class SymbolTable {
     }
 
     public SymbolType getMethodReturnType(String className, String methodName) {
-//        try {
             return klasses.get(className).Methodes.get(methodName).returnType;
-//        }catch (NullPointerException ed){
-//            ed.printStackTrace();
-//            return null;
-//        }
 
     }
 
@@ -147,7 +131,7 @@ public class SymbolTable {
         public int codeAddress;
         public Map<String, Symbol> parameters;
         public Map<String, Symbol> localVariable;
-        private ArrayList<String> orderdParameters;
+        private final ArrayList<String> orderedParameters = new ArrayList<>();
         public int callerAddress;
         public int returnAddress;
         public SymbolType returnType;
@@ -156,7 +140,6 @@ public class SymbolTable {
         public Method(int codeAddress, SymbolType returnType) {
             this.codeAddress = codeAddress;
             this.returnType = returnType;
-            this.orderdParameters = new ArrayList<>();
             this.returnAddress = mem.getDateAddress();
             this.callerAddress = mem.getDateAddress();
             this.parameters = new HashMap<>();
@@ -173,7 +156,7 @@ public class SymbolTable {
 
         public void addParameter(String parameterName) {
             parameters.put(parameterName, new Symbol(lastType, mem.getDateAddress()));
-            orderdParameters.add(parameterName);
+            orderedParameters.add(parameterName);
         }
 
         private void reset() {
@@ -181,22 +164,8 @@ public class SymbolTable {
         }
 
         private Symbol getNextParameter() {
-            return parameters.get(orderdParameters.get(index++));
+            return parameters.get(orderedParameters.get(index++));
         }
     }
 
 }
-
-//class Symbol{
-//    public SymbolType type;
-//    public int address;
-//    public Symbol(SymbolType type , int address)
-//    {
-//        this.type = type;
-//        this.address = address;
-//    }
-//}
-//enum SymbolType{
-//    Int,
-//    Bool
-//}
