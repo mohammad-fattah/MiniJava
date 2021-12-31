@@ -7,7 +7,7 @@ import java.util.List;
  * Created by mohammad hosein on 6/27/2015.
  */
 public class Memory {
-    private List<_3AddressCode> codeBlock;
+    private final List<_3AddressCode> codeBlock;
     private int lastTempIndex;
     private int lastDataAddress;
     private final static int stratTempMemoryAddress = 500;

@@ -7,7 +7,6 @@ import semantic.symbol.Symbol;
 import semantic.symbol.SymbolTable;
 import semantic.symbol.SymbolType;
 
-import java.util.List;
 import java.util.Stack;
 
 /**
@@ -15,7 +14,7 @@ import java.util.Stack;
  */
 public class CodeGenerator {
     private final Memory memory = new Memory();
-    private final Stack<Address> ss = new Stack<Address>();
+    private final Stack<Address> ss = new Stack<>();
     private final Stack<String> symbolStack = new Stack<>();
     private final Stack<String> callStack = new Stack<>();
     private final SymbolTable symbolTable;
