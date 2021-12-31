@@ -16,12 +16,11 @@ import scanner.token.Token;
 
 public class Parser {
   private final ArrayList<Rule> rules;
-  private final Stack<Integer> parsStack;
+  private final Stack<Integer> parsStack = new Stack<>();
   private ParseTable parseTable;
   private final CodeGenerator cg;
 
   public Parser() {
-    parsStack = new Stack<>();
     parsStack.push(0);
     try {
       parseTable = new ParseTable(Files.readAllLines(Paths.get("src/main/resources/parseTable")).get(0));
@@ -64,11 +63,9 @@ public class Parser {
               parsStack.pop();
             }
 
-            Log.print(/*"state : " +*/ parsStack.peek() + "\t" + rule.LHS);
-//                        Log.print("LHS : "+rule.LHS);
+            Log.print(parsStack.peek() + "\t" + rule.LHS);
             parsStack.push(parseTable.getGotoTable(parsStack.peek(), rule.LHS));
-            Log.print(/*"new State : " + */parsStack.peek() + "");
-//                        Log.print("");
+            Log.print(parsStack.peek() + "");
             try {
               cg.semanticFunction(rule.semanticAction, lookAhead);
             } catch (Exception e) {
@@ -84,21 +81,6 @@ public class Parser {
       } catch (Exception ignored) {
 
         ignored.printStackTrace();
-//                boolean find = false;
-//                for (NonTerminal t : NonTerminal.values()) {
-//                    if (parseTable.getGotoTable(parsStack.peek(), t) != -1) {
-//                        find = true;
-//                        parsStack.push(parseTable.getGotoTable(parsStack.peek(), t));
-//                        StringBuilder tokenFollow = new StringBuilder();
-//                        tokenFollow.append(String.format("|(?<%s>%s)", t.name(), t.pattern));
-//                        Matcher matcher = Pattern.compile(tokenFollow.substring(1)).matcher(lookAhead.toString());
-//                        while (!matcher.find()) {
-//                            lookAhead = lexicalAnalyzer.getNextToken();
-//                        }
-//                    }
-//                }
-//                if (!find)
-//                    parsStack.pop();
       }
 
 
